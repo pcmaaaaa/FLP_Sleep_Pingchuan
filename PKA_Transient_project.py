@@ -1201,12 +1201,12 @@ def transition_triggered_lifetime(df,filter_bounds, data_folder = '/Volumes/yaoc
 			ax.set_ylim([min(y_min_int)-10000, max(y_max_int)+10000])
 
 	lifetime_ax[0] = graph.label_axes(lifetime_ax[0], y = r'$\Delta$'+ ' Lifetime (ns)')
-	lifetime_fig.suptitle(experimental_sensor, fontsize = 30, fontweight = 'bold')
+	lifetime_fig.suptitle(experimental_sensor + ' ' + basenames[0], fontsize = 30, fontweight = 'bold')
 	lifetime_fig, lifetime_ax = graph.thick_axes(lifetime_fig, lifetime_ax)
 	lifetime_fig.tight_layout()
 	if intensity:
 		intensity_ax[0] = graph.label_axes(intensity_ax[0], y = r'$\Delta$'+ 'Photon Count')
-		intensity_fig.suptitle(experimental_sensor, fontsize = 30, fontweight = 'bold')
+		intensity_fig.suptitle(experimental_sensor + ' ' + basenames[0], fontsize = 30, fontweight = 'bold')
 		intensity_fig, intensity_ax = graph.thick_axes(intensity_fig, intensity_ax)
 		intensity_fig.tight_layout()
 
