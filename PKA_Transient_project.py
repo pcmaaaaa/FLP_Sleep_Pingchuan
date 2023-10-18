@@ -1097,7 +1097,7 @@ def transition_triggered_lifetime(df,filter_bounds, data_folder = '/Volumes/yaoc
 			experimental_sensor = experimental_sensor, microarousals = microarousals, fs = fs)
 
 		print(concat_filename)
-		RemoveFirst3Hours(exp)
+		exp = RemoveFirst3Hours(exp)
 
 		# if exp.DeadTime:
 		# 	use_flag = input(b+' might have deadtime issues. Do you want to still include it (y/n)?')
@@ -1233,7 +1233,7 @@ def write_lifetime_dict_to_csv(basename, data_folder, these_transitions, lifetim
 		intensity_list.to_csv(csv_filename_intensity, index = False)
 
 def RemoveFirst3Hours(exp):
-	RemainedIndex = np.where(exp.ZeitTime > 15)
+	RemainedIndex, = np.where(exp.ZeitTime > 15)
 	exp.ZeitTime = exp.ZeitTime[RemainedIndex]
 	exp.PhotonCount = exp.PhotonCount[RemainedIndex]
 	exp.Lifetime = exp.Lifetime[RemainedIndex]
@@ -1243,10 +1243,14 @@ def RemoveFirst3Hours(exp):
 	exp.Filt = exp.Filt[RemainedIndex]
 	exp.Shuff = exp.Shuff[RemainedIndex]
 
-	SSTime_remainedIndex = np.where((exp.SSTime >= exp.Time[RemainedIndex[0][0]]) & (exp.SSTime <= exp.Time[RemainedIndex[0][-1]]))
+	SSTime_remainedIndex, = np.where((exp.SSTime >= exp.Time[RemainedIndex[0]]) & (exp.SSTime <= exp.Time[RemainedIndex[-1]]))
 	exp.Time = exp.Time[RemainedIndex]
-	exp.SSTime = exp.SSTime[SSTime_remainedIndex[0][0]:SSTime_remainedIndex[0][-1]]
-	exp.SleepStates = exp.SleepStates[SSTime_remainedIndex[0][0]:SSTime_remainedIndex[0][-1]]
+	exp.SSTime = exp.SSTime[SSTime_remainedIndex]
+	exp.SleepStates = exp.SleepStates[SSTime_remainedIndex]
+
+	assert np.size(exp.ZeitTime) == np.size(exp.PhotonCount) == np.size(exp.Lifetime) == np.size(exp.GaussianWidth) == np.size(exp.ChiSquare) == np.size(exp.DeltaPeakTime) == np.size(exp.Shuff) == np.size(exp.Filt) == np.size(exp.Time)
+
+	assert np.size(exp.SSTime) == np.size(exp.SleepStates)
 
 	return exp
 	
